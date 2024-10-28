@@ -18,10 +18,22 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": ["RECORD_AUDIO", "INTERNET"],
+      "package": "com.quadriceps.RNTaskAPP"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
-    }
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "plugins": [
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "CUSTOM: Allow $(PRODUCT_NAME) to access the microphone",
+          "speechRecognitionPermission": "CUSTOM: Allow $(PRODUCT_NAME) to securely recognize user speech"
+        }
+      ]
+    ]
   }
 }

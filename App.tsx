@@ -1,20 +1,37 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from "react";
+import "./global.css";
+import { NavigationContainer } from "@react-navigation/native";
+import Router from "./src/Router/Router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { StatusBar } from "expo-status-bar";
+import { useStore } from "./src/store/store";
+import * as eva from "@eva-design/eva";
+import { ApplicationProvider } from "@ui-kitten/components";
+import Toast from "react-native-toast-message";
+import { LogBox } from "react-native";
 
-export default function App() {
+LogBox.ignoreLogs([
+  "`new NativeEventEmitter()`",
+  "Warning: `new NativeEventEmitter()`",
+  "Warning: MeasureElement:",
+]);
+
+const App = () => {
+  const { isDarkMode } = useStore();
   return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ApplicationProvider {...eva} theme={isDarkMode ? eva.dark : eva.light}>
+        <NavigationContainer>
+          <StatusBar
+            backgroundColor="transparent"
+            style={isDarkMode ? "light" : "dark"}
+          />
+          <Router />
+          <Toast />
+        </NavigationContainer>
+      </ApplicationProvider>
+    </GestureHandlerRootView>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;
