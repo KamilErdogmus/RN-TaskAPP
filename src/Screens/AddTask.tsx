@@ -18,6 +18,7 @@ import { useNavigation } from "@react-navigation/native";
 import { NavigationProp, StatusType } from "../Utils/types";
 import STT from "../components/STT";
 import { status } from "../Utils/constants";
+import { SCREENS } from "../Utils/SCREENS";
 
 interface FormValues {
   title: string;
@@ -80,7 +81,7 @@ const AddTask = () => {
               text1: "Task successfully created!",
               position: "bottom",
             });
-            navigation.goBack();
+            navigation.navigate(SCREENS.Home);
           } catch (error) {
             console.error(error);
             Toast.show({
