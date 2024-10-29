@@ -11,4 +11,5 @@ export const Schema = Yup.object().shape({
   category: Yup.number()
     .required("Category is required")
     .min(0, "Please select a category"),
+  status: Yup.number().required("Status is required"),
 });

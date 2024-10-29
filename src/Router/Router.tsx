@@ -3,7 +3,6 @@ import { SCREENS } from "../Utils/SCREENS";
 //* Screens
 import HomeScreen from "../Screens/HomeScreen";
 import AddTask from "../Screens/AddTask";
-import TaskDetail from "../Screens/TaskDetail";
 
 import { useStore } from "../store/store";
 
@@ -29,7 +28,6 @@ const Router = () => {
         name={SCREENS.CreateTask}
         component={AddTask}
       />
-      <Stack.Screen name={SCREENS.TaskDetail} component={TaskDetail} />
     </Stack.Navigator>
   );
 };

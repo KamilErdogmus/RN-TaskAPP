@@ -10,7 +10,7 @@ import Toast from "react-native-toast-message";
 import FontAwesome from "@expo/vector-icons/FontAwesome";
 
 interface STTProps {
-  onTextReceived?: (text: string) => void; // Opsiyonel callback prop
+  onTextReceived?: (text: string) => void;
 }
 
 export default function STT({ onTextReceived }: STTProps) {
@@ -36,6 +36,7 @@ export default function STT({ onTextReceived }: STTProps) {
             type: "error",
             text1: "Permission Denied",
             text2: "Microphone permission is required",
+            position: "bottom",
           });
           return false;
         }
@@ -71,7 +72,7 @@ export default function STT({ onTextReceived }: STTProps) {
       if (e.value && e.value[0]) {
         const text = e.value[0];
         setRecognizedText(text);
-        onTextReceived?.(text); // Callback'i çağır
+        onTextReceived?.(text);
       }
     };
 

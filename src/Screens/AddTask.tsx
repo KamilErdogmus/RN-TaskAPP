@@ -1,7 +1,7 @@
 import { ImageProps, SafeAreaView, View } from "react-native";
 import React, { useRef } from "react";
 import { useStore } from "../store/store";
-import { Formik, FormikProps, FormikValues } from "formik";
+import { Formik, FormikProps } from "formik";
 import {
   Button,
   Input,
@@ -15,25 +15,41 @@ import { Schema } from "../Utils/validation";
 import Toast from "react-native-toast-message";
 import uuid from "react-native-uuid";
 import { useNavigation } from "@react-navigation/native";
-import { NavigationProp } from "../Utils/types";
+import { NavigationProp, StatusType } from "../Utils/types";
 import STT from "../components/STT";
+import { status } from "../Utils/constants";
+
+interface FormValues {
+  title: string;
+  description: string;
+  startDate: Date | null;
+  endDate: Date | null;
+  category: number | undefined;
+  status: number;
+}
 
 const AddTask = () => {
-  const { isDarkMode } = useStore();
-  const { addTask } = useStore();
-
+  const { isDarkMode, addTask } = useStore();
   const navigation = useNavigation<NavigationProp>();
-  const formikRef = useRef<FormikProps<FormikValues>>(null);
+  const formikRef = useRef<FormikProps<FormValues>>(null);
 
-  const LoadingIndicator = (props: ImageProps): React.ReactElement => (
+  const LoadingIndicator = (props: ImageProps) => (
     <View className="justify-center items-center">
       <Spinner size="small" />
     </View>
   );
 
-  const handleRecognizedText = (text: string) => {
-    // Formik form değerlerini güncelle
+  const handleRecognizedText = (text: string): void => {
     formikRef.current?.setFieldValue("description", text);
+  };
+
+  const initialValues: FormValues = {
+    title: "",
+    description: "",
+    startDate: null,
+    endDate: null,
+    category: undefined,
+    status: status.ONGOING,
   };
 
   return (
@@ -42,36 +58,35 @@ const AddTask = () => {
     >
       <Formik
         innerRef={formikRef}
-        initialValues={{
-          title: "",
-          description: "",
-          startDate: null,
-          endDate: null,
-          category: -1,
-        }}
-        onSubmit={async (values, { setSubmitting, resetForm }) => {
+        initialValues={initialValues}
+        onSubmit={async (values: FormValues, { setSubmitting, resetForm }) => {
           try {
             const newTask = {
-              id: uuid.v4(),
+              id: uuid.v4().toString(),
               title: values.title,
               description: values.description,
               startDate: values.startDate,
               endDate: values.endDate,
+              status: StatusType.ONGOING,
               category: values.category,
-              completed: false,
               createdAt: new Date(),
             };
 
             addTask(newTask);
             resetForm();
 
-            Toast.show({ type: "success", text1: "Task succesfully created!" });
+            Toast.show({
+              type: "success",
+              text1: "Task successfully created!",
+              position: "bottom",
+            });
             navigation.goBack();
           } catch (error) {
             console.error(error);
             Toast.show({
               type: "error",
               text1: "Something went wrong",
+              position: "bottom",
             });
           } finally {
             setSubmitting(false);
@@ -87,7 +102,7 @@ const AddTask = () => {
           setFieldValue,
           errors,
           touched,
-        }) => (
+        }: FormikProps<FormValues>) => (
           <View className="mx-2 gap-y-4">
             <Input
               size="large"
@@ -139,7 +154,7 @@ const AddTask = () => {
 
             <RadioGroup
               selectedIndex={values.category}
-              onChange={(choose) => setFieldValue("category", choose)}
+              onChange={(choose: number) => setFieldValue("category", choose)}
               status={touched.category && errors.category ? "danger" : "basic"}
             >
               <Radio>Software</Radio>
@@ -151,7 +166,7 @@ const AddTask = () => {
             )}
             <Button
               accessoryLeft={isSubmitting ? LoadingIndicator : undefined}
-              onPress={handleSubmit}
+              onPress={() => handleSubmit()}
               style={{ marginTop: 30 }}
               disabled={isSubmitting}
               status="success"

@@ -1,5 +1,5 @@
-import { Animated, Pressable, Text, View } from "react-native";
-import React, { useRef } from "react";
+import { Animated, Pressable, View } from "react-native";
+import React, { useRef, useState } from "react";
 import Feather from "@expo/vector-icons/Feather";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import Entypo from "@expo/vector-icons/Entypo";
@@ -7,16 +7,19 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import { useStore } from "../../store/store";
 import { SCREENS } from "../../Utils/SCREENS";
 import { useNavigation } from "@react-navigation/native";
+import ClearModal from "./ClearModal";
+import { NavigationProp } from "../../Utils/types";
 
 const DURATION = 400;
 const RADIUS = 80;
 
 const FloatActionButton = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp>();
   const isOpened = useRef(false);
   const animation = useRef(new Animated.Value(0)).current;
   const rotateAnimation = useRef(new Animated.Value(0)).current;
   const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+  const [showConfirmModal, setShowConfirmModal] = useState<boolean>(false);
 
   const handlePress = () => {
     const toValue = isOpened.current ? 0 : 1;
@@ -43,9 +46,9 @@ const FloatActionButton = () => {
   });
 
   const positions = [
-    { x: -RADIUS, y: 15 }, // Sol (0 derece)
-    { x: -RADIUS * Math.cos(Math.PI / 4), y: -RADIUS * Math.sin(Math.PI / 4) }, // Sol üst (45 derece)
-    { x: 15, y: -RADIUS }, // Üst (90 derece)
+    { x: -RADIUS, y: 15 },
+    { x: -RADIUS * Math.cos(Math.PI / 4), y: -RADIUS * Math.sin(Math.PI / 4) },
+    { x: 15, y: -RADIUS },
   ];
 
   const createAnimatedStyle = (index: number) => {
@@ -72,65 +75,76 @@ const FloatActionButton = () => {
     };
   };
 
-  const { isDarkMode, toggleDarkMode } = useStore();
+  const { isDarkMode, toggleDarkMode, clearTask } = useStore();
 
   const AddTask = () => {
     navigation.navigate(SCREENS.CreateTask);
   };
-  const handleClear = () => {};
+  const handleClear = () => {
+    setShowConfirmModal(true);
+  };
 
   return (
-    <View className="absolute bottom-10 right-10">
-      {/* Üst buton (90 derece) */}
-      <AnimatedPressable
-        onPress={AddTask}
-        style={[createAnimatedStyle(2)]}
-        className="w-14 h-14 bg-[#e63030] rounded-full justify-center items-center absolute"
-      >
-        <Entypo name="plus" size={32} color={isDarkMode ? "black" : "white"} />
-      </AnimatedPressable>
-
-      {/* Sol üst buton (45 derece) */}
-      <AnimatedPressable
-        onPress={handleClear}
-        style={[createAnimatedStyle(1)]}
-        className="w-14 h-14 bg-[#e63030] rounded-full justify-center items-center absolute"
-      >
-        <FontAwesome6
-          name="trash-can"
-          size={32}
-          color={isDarkMode ? "black" : "white"}
-        />
-      </AnimatedPressable>
-      {/* Sol buton (0 derece) */}
-      <AnimatedPressable
-        style={[createAnimatedStyle(0)]}
-        onPress={toggleDarkMode}
-        className="w-14 h-14 bg-[#e63030] rounded-full justify-center items-center absolute"
-      >
-        <MaterialIcons
-          name={isDarkMode ? "light-mode" : "dark-mode"}
-          size={32}
-          color={isDarkMode ? "white" : "black"}
-        />
-      </AnimatedPressable>
-
-      {/* Ana buton */}
-      <Pressable
-        onPress={handlePress}
-        style={({ pressed }) => [
-          pressed ? { transform: [{ scale: 0.9 }] } : null,
-        ]}
-        className="justify-center items-center w-20 h-20 rounded-full bg-[#e63030]"
-      >
-        <Animated.View style={{ transform: [{ rotate }] }}>
-          <Feather
-            name="settings"
-            size={40}
+    <View>
+      <View className="absolute bottom-10 right-10">
+        <AnimatedPressable
+          onPress={AddTask}
+          style={[createAnimatedStyle(2)]}
+          className="w-14 h-14 bg-[#e63030] rounded-full justify-center items-center absolute"
+        >
+          <Entypo
+            name="plus"
+            size={32}
             color={isDarkMode ? "black" : "white"}
           />
-        </Animated.View>
-      </Pressable>
+        </AnimatedPressable>
+
+        <AnimatedPressable
+          onPress={handleClear}
+          style={[createAnimatedStyle(1)]}
+          className="w-14 h-14 bg-[#e63030] rounded-full justify-center items-center absolute"
+        >
+          <FontAwesome6
+            name="trash-can"
+            size={32}
+            color={isDarkMode ? "black" : "white"}
+          />
+        </AnimatedPressable>
+
+        <AnimatedPressable
+          style={[createAnimatedStyle(0)]}
+          onPress={toggleDarkMode}
+          className="w-14 h-14 bg-[#e63030] rounded-full justify-center items-center absolute"
+        >
+          <MaterialIcons
+            name={isDarkMode ? "light-mode" : "dark-mode"}
+            size={32}
+            color={isDarkMode ? "white" : "black"}
+          />
+        </AnimatedPressable>
+
+        <Pressable
+          onPress={handlePress}
+          style={({ pressed }) => [
+            pressed ? { transform: [{ scale: 0.9 }] } : null,
+          ]}
+          className="justify-center items-center w-20 h-20 rounded-full bg-[#e63030]"
+        >
+          <Animated.View style={{ transform: [{ rotate }] }}>
+            <Feather
+              name="settings"
+              size={40}
+              color={isDarkMode ? "black" : "white"}
+            />
+          </Animated.View>
+        </Pressable>
+      </View>
+
+      <ClearModal
+        showConfirmModal={showConfirmModal}
+        setShowConfirmModal={setShowConfirmModal}
+        clearTask={clearTask}
+      />
     </View>
   );
 };
