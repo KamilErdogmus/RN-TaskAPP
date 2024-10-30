@@ -81,7 +81,7 @@ const AddTask = () => {
               text1: "Task successfully created!",
               position: "bottom",
             });
-            navigation.navigate(SCREENS.Home);
+            navigation.push(SCREENS.Home);
           } catch (error) {
             console.error(error);
             Toast.show({

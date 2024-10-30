@@ -25,7 +25,6 @@ interface TaskStore {
   completed: number;
   cancelled: number;
   addTask: (task: Task) => void;
-  getTasks: () => Promise<void>;
   removeTask: (id: string) => void;
   updateTaskStatus: (id: string, status: StatusType) => void;
   updateTaskCounts: () => void;
@@ -86,19 +85,6 @@ export const useStore = create<TaskStore>()(
         set((state) => ({
           ...calculateTaskCounts(state.tasks),
         })),
-
-      getTasks: async () => {
-        try {
-          const storedTasks = await AsyncStorage.getItem("tasks");
-          if (storedTasks) {
-            const parsedTasks = JSON.parse(storedTasks);
-            set({ tasks: parsedTasks });
-            set((state) => ({ ...calculateTaskCounts(state.tasks) }));
-          }
-        } catch (error) {
-          console.error("Error getting tasks:", error);
-        }
-      },
     }),
     {
       name: "task-storage",

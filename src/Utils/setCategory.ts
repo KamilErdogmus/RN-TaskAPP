@@ -6,7 +6,6 @@ export const setCategory = (key: number) => {
       return "Design";
     case 2:
       return "Operation";
-
     default:
       return "";
   }

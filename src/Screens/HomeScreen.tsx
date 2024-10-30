@@ -1,5 +1,4 @@
-import { FlatList, RefreshControl } from "react-native";
-
+import { FlatList } from "react-native";
 import FloatActionButton from "../components/ui/FloatActionButton";
 import { useStore } from "../store/store";
 import TaskCard from "../components/home/TaskCard";
@@ -8,11 +7,11 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect } from "react";
 
 const HomeScreen = () => {
-  const { isDarkMode, tasks, updateTaskCounts, getTasks } = useStore();
+  const { isDarkMode, tasks, updateTaskCounts } = useStore();
 
   useEffect(() => {
-    getTasks();
-  }, [getTasks]);
+    updateTaskCounts();
+  }, [updateTaskCounts]);
 
   return (
     <SafeAreaView

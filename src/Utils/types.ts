@@ -49,8 +49,8 @@ export interface HeaderProps {
 export interface FormValues {
   title: string;
   description: string;
-  startDate: Date | null;
-  endDate: Date | null;
+  startDate: Date | string;
+  endDate: Date | string;
   category: number;
   status: StatusType;
 }
