@@ -32,7 +32,7 @@ Task-APP is a simple and intuitive task management app built with React Native a
 
 ## Preview
 
-<img src="" height="500" />
+<img src="assets/GIF.gif" height="500" />
 
 ## Installation
 
