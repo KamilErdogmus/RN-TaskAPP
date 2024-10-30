@@ -4,38 +4,54 @@ import { BottomSheetScrollView } from "@gorhom/bottom-sheet";
 import { Button, Divider, Text } from "@ui-kitten/components";
 import moment from "moment";
 import { setCategory } from "../../Utils/setCategory";
-import { CardConstant, StatusType, Task } from "../../Utils/types";
+import {
+  CardConstant,
+  NavigationProp,
+  StatusType,
+  Task,
+} from "../../Utils/types";
 import { useStore } from "../../store/store";
 import Toast from "react-native-toast-message";
+import { useNavigation } from "@react-navigation/native";
+import { SCREENS } from "../../Utils/SCREENS";
 
 const Modal = ({
   currentTaskStatus,
   item,
+  onClose,
 }: {
   currentTaskStatus: CardConstant;
   item: Task;
+  onClose: () => void;
 }) => {
   const { updateTaskStatus, removeTask } = useStore();
+  const navigation = useNavigation<NavigationProp>();
 
   const handleStart = () => {
     updateTaskStatus(item.id, StatusType.PENDING);
+    onClose();
     Toast.show({ type: "info", text1: "Status has been changed." });
   };
 
   const handleComplete = () => {
     updateTaskStatus(item.id, StatusType.COMPLETED);
+    onClose();
     Toast.show({ type: "info", text1: "Status has been changed." });
   };
 
   const handleCancel = () => {
     updateTaskStatus(item.id, StatusType.CANCEL);
+    onClose();
     Toast.show({ type: "info", text1: "Status has been changed." });
   };
 
   const handleDelete = () => {
     removeTask(item.id);
+    navigation.goBack();
+    navigation.goBack();
     Toast.show({ type: "error", text1: "Task has been deleted!." });
   };
+
   return (
     <View className="justify-between flex-1">
       <BottomSheetScrollView

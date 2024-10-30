@@ -12,7 +12,10 @@ export type RootStackParamList = {
   CreateTask: undefined;
 };
 
-export type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+export type NavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  keyof RootStackParamList
+>;
 
 export interface Task {
   id: string;

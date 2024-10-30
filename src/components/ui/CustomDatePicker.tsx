@@ -1,8 +1,7 @@
 import React from "react";
 import { Datepicker } from "@ui-kitten/components";
 
-const CustomDatePicker = (props: any) => {
-  const { onSelectDate } = props;
+const CustomDatePicker = ({ onSelectDate = () => {}, ...props }: any) => {
   return (
     <Datepicker {...props} onSelect={(nextDate) => onSelectDate(nextDate)} />
   );

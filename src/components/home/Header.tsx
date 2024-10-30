@@ -8,7 +8,7 @@ import {
 } from "@expo/vector-icons";
 
 import { CardConstant } from "../../Utils/types";
-import { Text } from "@ui-kitten/components";
+import { Divider, Text } from "@ui-kitten/components";
 import { useStore } from "../../store/store";
 import { COLORS } from "../../Utils/COLORS";
 
@@ -97,14 +97,18 @@ const Header = () => {
   ];
 
   return (
-    <View>
+    <View className="flex-1">
       <FlatList
         contentContainerStyle={{ paddingBottom: 20 }}
         numColumns={2}
+        keyExtractor={(item) => item.id.toString()}
         data={cardConstants}
         renderItem={({ item }) => <RenderItem item={item} />}
       />
-      <Text style={{ fontSize: 24, fontWeight: "bold" }}>All Tasks</Text>
+      <Text style={{ fontSize: 24, fontWeight: "bold", marginVertical: 4 }}>
+        All Tasks
+      </Text>
+      <Divider />
     </View>
   );
 };

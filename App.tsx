@@ -23,16 +23,16 @@ const App = () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ApplicationProvider {...eva} theme={isDarkMode ? eva.dark : eva.light}>
-        <BottomSheetModalProvider>
-          <NavigationContainer>
+        <NavigationContainer>
+          <BottomSheetModalProvider>
             <StatusBar
               backgroundColor="transparent"
               style={isDarkMode ? "light" : "dark"}
             />
             <Router />
             <Toast />
-          </NavigationContainer>
-        </BottomSheetModalProvider>
+          </BottomSheetModalProvider>
+        </NavigationContainer>
       </ApplicationProvider>
     </GestureHandlerRootView>
   );

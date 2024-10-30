@@ -7,23 +7,27 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useEffect } from "react";
 
 const HomeScreen = () => {
-  const { isDarkMode, tasks, updateTaskCounts } = useStore();
+  const { isDarkMode, tasks, updateTaskCounts, updateTaskStatus } = useStore();
 
   useEffect(() => {
     updateTaskCounts();
-  }, [updateTaskCounts]);
+  }, [updateTaskCounts, updateTaskStatus]);
 
   return (
     <SafeAreaView
       className={`flex-1 ${isDarkMode ? "bg-dark" : "bg-light-surface"}`}
     >
       <FlatList
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         data={tasks}
-        ListHeaderComponent={<Header />}
-        extraData={tasks.length}
+        ListHeaderComponent={() => <Header />}
+        extraData={tasks}
         renderItem={({ item }) => <TaskCard item={item} />}
-        contentContainerStyle={{ padding: 8, paddingBottom: 100 }}
+        contentContainerStyle={{
+          marginHorizontal: 8,
+          paddingBottom: 100,
+          marginVertical: 12,
+        }}
         showsVerticalScrollIndicator={false}
         removeClippedSubviews={true}
         maxToRenderPerBatch={10}

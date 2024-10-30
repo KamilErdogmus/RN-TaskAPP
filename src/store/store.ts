@@ -34,7 +34,7 @@ interface TaskStore {
 export const useStore = create<TaskStore>()(
   persist(
     (set) => ({
-      isDarkMode: false,
+      isDarkMode: true,
       toggleDarkMode: () => set((state) => ({ isDarkMode: !state.isDarkMode })),
 
       tasks: [],

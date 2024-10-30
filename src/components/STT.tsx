@@ -77,12 +77,10 @@ export default function STT({ onTextReceived }: STTProps) {
     };
 
     const speechErrorHandler = (e: any) => {
-      console.error("Speech recognition error:", e);
       setIsListening(false);
       Toast.show({
         type: "error",
-        text1: "Error",
-        text2: "Failed to recognize speech",
+        text1: e.error.message,
         position: "bottom",
       });
     };

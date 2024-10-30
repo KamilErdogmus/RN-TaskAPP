@@ -79,9 +79,15 @@ const FloatActionButton = () => {
 
   const AddTask = () => {
     navigation.navigate(SCREENS.CreateTask);
+    animation.setValue(0);
+    rotateAnimation.setValue(0);
+    isOpened.current = false;
   };
   const handleClear = () => {
     setShowConfirmModal(true);
+    animation.setValue(0);
+    rotateAnimation.setValue(0);
+    isOpened.current = false;
   };
 
   return (

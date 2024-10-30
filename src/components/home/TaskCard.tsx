@@ -16,7 +16,22 @@ import moment from "moment";
 import { setCategory } from "../../Utils/setCategory";
 import Modal from "../ui/Modal";
 
-const TaskCard = ({ item }: { item: Task }) => {
+interface TaskCardProps {
+  item: Task;
+}
+
+const TaskCard = ({
+  item = {
+    id: "default-id",
+    title: "Default Task",
+    description: "Default Description",
+    status: 1,
+    startDate: new Date(),
+    endDate: new Date(),
+    category: 1,
+    createdAt: new Date(),
+  },
+}: TaskCardProps) => {
   const { isDarkMode } = useStore();
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -26,24 +41,28 @@ const TaskCard = ({ item }: { item: Task }) => {
   const iconColor = isDarkMode ? "white" : "black";
   const taskValues = [
     {
+      id: 1,
       status: 1,
       title: "Ongoing",
       bgColor: COLORS.ONGOING,
       icon: <FontAwesome name="play" size={24} color={iconColor} />,
     },
     {
+      id: 2,
       status: 2,
       title: "Pending",
       bgColor: COLORS.PENDING,
       icon: <MaterialIcons name="pending" size={24} color={iconColor} />,
     },
     {
+      id: 3,
       status: 3,
       title: "Completed",
       bgColor: COLORS.COMPLETED,
       icon: <Ionicons name="checkmark-done" size={24} color={iconColor} />,
     },
     {
+      id: 4,
       status: 4,
       title: "Cancel",
       bgColor: COLORS.CANCELLED,
@@ -51,8 +70,9 @@ const TaskCard = ({ item }: { item: Task }) => {
     },
   ];
   const currentTaskStatus = taskValues.find(
-    (task) => task.status === item?.status
-  )!;
+    (task) => task?.status === item?.status
+  );
+
   return (
     <View className="flex-1">
       <Pressable
@@ -70,8 +90,8 @@ const TaskCard = ({ item }: { item: Task }) => {
           {currentTaskStatus?.icon}
         </View>
         <View className="ml-4 flex-1 gap-y-6">
-          <Text style={{ fontSize: 18, fontWeight: "600" }}>{item.title}</Text>
-          <Text style={{ fontSize: 14 }}>{item.description}</Text>
+          <Text style={{ fontSize: 18, fontWeight: "600" }}>{item?.title}</Text>
+          <Text style={{ fontSize: 14 }}>{item?.description}</Text>
           <View className="flex-row items-center justify-between w-full">
             <View>
               <Text
@@ -84,7 +104,7 @@ const TaskCard = ({ item }: { item: Task }) => {
               >
                 Start Date
               </Text>
-              <Text>{moment(item.startDate).format("DD-MM-YYYY")}</Text>
+              <Text>{moment(item?.startDate).format("DD-MM-YYYY")}</Text>
             </View>
             <View>
               <Text
@@ -97,20 +117,24 @@ const TaskCard = ({ item }: { item: Task }) => {
               >
                 End Date
               </Text>
-              <Text>{moment(item.endDate).format("DD-MM-YYYY")}</Text>
+              <Text>{moment(item?.endDate).format("DD-MM-YYYY")}</Text>
             </View>
           </View>
         </View>
         <View className="flex-end ml-2 h-full">
           <Text style={{ fontSize: 14, color: "gray" }}>
-            {setCategory(item.category)}
+            {setCategory(item?.category)}
           </Text>
         </View>
       </Pressable>
 
       <BottomSheetModal
         ref={bottomSheetModalRef}
-        containerStyle={{ paddingVertical: 20, paddingHorizontal: 16 }}
+        containerStyle={{
+          paddingVertical: 20,
+          paddingHorizontal: 16,
+          flex: 1,
+        }}
         index={0}
         snapPoints={["93%"]}
         enablePanDownToClose
@@ -121,7 +145,11 @@ const TaskCard = ({ item }: { item: Task }) => {
           backgroundColor: isDarkMode ? "#FFFFFF" : "#000000",
         }}
       >
-        <Modal currentTaskStatus={currentTaskStatus} item={item} />
+        <Modal
+          currentTaskStatus={currentTaskStatus}
+          item={item}
+          onClose={() => bottomSheetModalRef.current?.dismiss()}
+        />
       </BottomSheetModal>
     </View>
   );
